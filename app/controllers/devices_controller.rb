@@ -51,6 +51,7 @@
 
 	def respond_to_app_client
 		log_device_ip
+		log_device_uuid
 		config =  Aadhiconfig.all
 		case config[0].server_mode
 			when SERVER_MODE::REFRESH
@@ -74,7 +75,6 @@
 
 	def set_scenario
 		begin
-		  logger.fatal "Start set scenario"
 	      @configs = Aadhiconfig.all
 	      @configs[0].update(:server_mode=>"default")
 		  @scenario = Scenario.find_by(:scenario_name=>params[:scenario_name])
@@ -83,7 +83,6 @@
 		    	render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 		  else
 				@device = Device.find_or_initialize_by(:device_uuid=>params[:device_uuid])
-				logger.fatal "We did get here"
 			    if params[:isReportRequired] == 'yes'
 			    	@device.update(scenario: @scenario, :isReportRequired=>params[:isReportRequired])
 			    	@device_report = DeviceReport.find_or_initialize_by(:device_uuid=>params[:device_uuid]) 
@@ -144,6 +143,7 @@
 	def make_request
 		begin
 			log_device_ip
+			log_device_uuid
 			@device = Device.find_by(:device_uuid=>get_uuid)
 			if @device.blank?
 				log_notfound_request(get_path_query, request.method, get_ip_address)
@@ -167,6 +167,7 @@
 	def make_request_report
 		begin
 			log_device_ip
+			log_device_uuid
 			@device = DeviceReport.find_by(:device_ip=>get_uuid)
 			@scenario = @device.device_scenarios.last
 			if @device.blank?
@@ -261,8 +262,13 @@
 
 	private 
 	    def log_device_ip
-             logger.fatal "Device IP:"+get_ip_address.to_s
-	    end
+            logger.fatal "Device IP:"+get_ip_address.to_s
+		end
+		
+	private
+		def log_device_uuid
+			logger.fatal "Device UUID:"+get_uuid.to_s
+		end
 end
 
 
