@@ -74,8 +74,8 @@
 
 
 	def set_scenario
+		logger.fatal "We are in set scenario \n"
 		begin
-			logger.fatal "Setting scenario \n"
 	      @configs = Aadhiconfig.all
 	      @configs[0].update(:server_mode=>"default")
 		  @scenario = Scenario.find_by(:scenario_name=>params[:scenario_name])
