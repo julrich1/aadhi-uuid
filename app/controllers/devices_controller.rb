@@ -217,7 +217,8 @@
 
 	private
 		def get_uuid
-			logger.fatal request.headers["aadhi-uuid"]
+			uuid = request.headers["aadhi-uuid"]
+			logger.fatal "UUID is:"+uuid
 		end
 
 	private 
