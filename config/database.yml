@@ -6,21 +6,21 @@ default: &default
 development:
   adapter: mysql
   database: stubs
-  username: root
+  username: aadhi
   password: auto@123
   host: localhost
 
 test:
   adapter: mysql
   database: stubs
-  username: root
+  username: aadhi
   password: auto@123
   host: localhost
 
 production:
   adapter: mysql
   database: stubs
-  username: root
+  username: aadhi
   password: auto@123
   host: localhost
 
