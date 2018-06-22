@@ -74,7 +74,6 @@
 
 
 	def set_scenario
-		logger.fatal "We are in set scenario \n"
 		begin
 	      @configs = Aadhiconfig.all
 	      @configs[0].update(:server_mode=>"default")
@@ -84,6 +83,7 @@
 		    	render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 		  else
 				@device = Device.find_or_initialize_by(:device_uuid=>params[:device_uuid])
+				logger.fatal "Device is:"+@device.to_s
 			    if params[:isReportRequired] == 'yes'
 			    	@device.update(scenario: @scenario, :isReportRequired=>params[:isReportRequired])
 			    	@device_report = DeviceReport.find_or_initialize_by(:device_uuid=>params[:device_uuid]) 
