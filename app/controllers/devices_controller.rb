@@ -81,11 +81,11 @@
 		  		logger.fatal "Invalid scenario: #{params[:scenario_name]} \n"
 		    	render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 		  else
-			    @device = Device.find_or_initialize_by(:device_ip=>params[:device_ip])
+			    @device = Device.find_or_initialize_by(:device_uuid=>params[:device_uuid])
 			    if params[:isReportRequired] == 'yes'
 			    	@device.update(scenario: @scenario, :isReportRequired=>params[:isReportRequired])
-			    	@device_report = DeviceReport.find_or_initialize_by(:device_ip=>params[:device_ip]) 
-			    	@device_report.update(:device_ip=>params[:device_ip])
+			    	@device_report = DeviceReport.find_or_initialize_by(:device_uuid=>params[:device_uuid]) 
+			    	@device_report.update(:device_uuid=>params[:device_uuid])
 			    	@scenario = @device_report.device_scenarios.create(:scenario_name=>@device.scenario.scenario_name)
 			    	@device.scenario.routes.each do |route|
 			    		@route = @scenario.scenario_routes.create(:path=>route.path, :fixture=>route.fixture, :route_type=>route.route_type, :status=>route.status)
