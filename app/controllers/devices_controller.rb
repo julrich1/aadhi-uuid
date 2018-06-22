@@ -215,6 +215,11 @@
 			end
 		end
 
+	private
+		def get_uuid
+			logger.fatal request.headers["aadhi-uuid"]
+		end
+
 	private 
 		def get_path_query
 			host_path = request.host + request.path
