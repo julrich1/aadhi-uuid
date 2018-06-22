@@ -73,7 +73,8 @@
 
 
 	def set_scenario
-	    begin
+		begin
+		  logger.fatal "Start set scenario"
 	      @configs = Aadhiconfig.all
 	      @configs[0].update(:server_mode=>"default")
 		  @scenario = Scenario.find_by(:scenario_name=>params[:scenario_name])
