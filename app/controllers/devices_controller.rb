@@ -142,7 +142,7 @@
 	def make_request
 		begin
 			log_device_ip
-			@device = Device.find_by(:device_ip=>get_ip_address)
+			@device = Device.find_by(:device_uuid=>get_ip_address)
 			if @device.blank?
 				log_notfound_request(get_path_query, request.method, get_ip_address)
 				render :json => { :status => '404', :message => 'Not Found'}, :status => 404
