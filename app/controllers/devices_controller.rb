@@ -58,7 +58,7 @@
 				method =  request.method
 				make_request_to_actual_api(method,config)  
 			else
-				@device = Device.find_by(:device_ip=>get_ip_address)
+				@device = Device.find_by(:device_uuid=>get_ip_address)
 				if @device.blank?
 					render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 				else
