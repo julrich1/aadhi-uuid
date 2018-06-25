@@ -83,7 +83,6 @@
 		    	render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 		  else
 				@device = Device.find_or_initialize_by(:device_uuid=>params[:device_uuid])
-				logger.info "Device is:"+@device.to_s
 			    if params[:isReportRequired] == 'yes'
 			    	@device.update(scenario: @scenario, :isReportRequired=>params[:isReportRequired])
 			    	@device_report = DeviceReport.find_or_initialize_by(:device_uuid=>params[:device_uuid]) 
@@ -126,8 +125,7 @@
 		}
 		t.join
 		save_stubs(host+path<<"?"<<query, method, body, t.value[0], host, request, t.value[1].to_hash)
-	    render json: t.value[0].body, :status => t.value[0].code
-		
+	    render json: t.value[0].body, :status => t.value[0].code, content_type: t.value[1]['accept'][0]
 	end
 
 
@@ -221,7 +219,7 @@
 
 	private
 		def get_uuid
-			uuid = request.headers["aadhi-uuid"]
+			uuid = request.headers["aadhi-identifier"]
 		end
 
 	private 
