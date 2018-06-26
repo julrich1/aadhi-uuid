@@ -105,6 +105,7 @@
 
     private
 	def make_request_to_actual_api(method, config)
+		logger.fatal "Request is: ANYthiNG"
 	   	host, path, query, body = get_request_details
 	    conn = Connection.new(host, config)
 	    response = ""
@@ -123,7 +124,6 @@
 			end
 		}
 		t.join
-		logger.fatal "Request is: ANYthiNG"
 		save_stubs(host+path<<"?"<<query, method, body, t.value[0], host, request, t.value[1].to_hash)
 		render json: t.value[0].body, :status => t.value[0].code, content_type: t.value[1]['accept'][0]
 	end
