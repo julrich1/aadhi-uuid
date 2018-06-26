@@ -105,7 +105,6 @@
 
     private
 	def make_request_to_actual_api(method, config)
-		
 	   	host, path, query, body = get_request_details
 	    conn = Connection.new(host, config)
 	    response = ""
@@ -125,7 +124,8 @@
 		}
 		t.join
 		save_stubs(host+path<<"?"<<query, method, body, t.value[0], host, request, t.value[1].to_hash)
-	    render json: t.value[0].body, :status => t.value[0].code, content_type: t.value[1]['accept'][0]
+		logger.fatal "#{t.value[1]['aadhi-identifier']}"
+		render json: t.value[0].body, :status => t.value[0].code, content_type: t.value[1]['accept'][0]
 	end
 
 
