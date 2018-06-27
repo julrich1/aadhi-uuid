@@ -51,7 +51,7 @@
 
 	def respond_to_app_client
 		log_device_ip
-		log_device_uuid
+		log_device_id
 		config =  Aadhiconfig.all
 		case config[0].server_mode
 			when SERVER_MODE::REFRESH
@@ -59,7 +59,7 @@
 				method =  request.method
 				make_request_to_actual_api(method,config)  
 			else
-				@device = Device.find_by(:device_uuid=>get_uuid)
+				@device = Device.find_by(:device_id=>get_id)
 				if @device.blank?
 					render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 				else
@@ -82,11 +82,11 @@
 		  		logger.fatal "Invalid scenario: #{params[:scenario_name]} \n"
 		    	render :json => { :status => '404', :message => 'Not Found'}, :status => 404
 		  else
-				@device = Device.find_or_initialize_by(:device_uuid=>params[:device_uuid])
+				@device = Device.find_or_initialize_by(:device_id=>params[:device_id])
 			    if params[:isReportRequired] == 'yes'
 			    	@device.update(scenario: @scenario, :isReportRequired=>params[:isReportRequired])
-			    	@device_report = DeviceReport.find_or_initialize_by(:device_uuid=>params[:device_uuid]) 
-			    	@device_report.update(:device_uuid=>params[:device_uuid])
+			    	@device_report = DeviceReport.find_or_initialize_by(:device_id=>params[:device_id])
+			    	@device_report.update(:device_id=>params[:device_id])
 			    	@scenario = @device_report.device_scenarios.create(:scenario_name=>@device.scenario.scenario_name)
 			    	@device.scenario.routes.each do |route|
 			    		@route = @scenario.scenario_routes.create(:path=>route.path, :fixture=>route.fixture, :route_type=>route.route_type, :status=>route.status)
@@ -144,8 +144,8 @@
 	def make_request
 		begin
 			log_device_ip
-			log_device_uuid
-			@device = Device.find_by(:device_uuid=>get_uuid)
+			log_device_id
+			@device = Device.find_by(:device_id=>get_id)
 			if @device.blank?
 				log_notfound_request(get_path_query, request.method, get_ip_address)
 				render :json => { :status => '404', :message => 'Not Found'}, :status => 404
@@ -168,8 +168,8 @@
 	def make_request_report
 		begin
 			log_device_ip
-			log_device_uuid
-			@device = DeviceReport.find_by(:device_ip=>get_uuid)
+			log_device_id
+			@device = DeviceReport.find_by(:device_ip=>get_id)
 			@scenario = @device.device_scenarios.last
 			if @device.blank?
 				log_notfound_request(get_path_query, request.method, get_ip_address)
@@ -220,8 +220,8 @@
 		end
 
 	private
-		def get_uuid
-			uuid = request.headers["aadhi-identifier"]
+		def get_id
+			id = request.headers["aadhi-identifier"]
 		end
 
 	private 
@@ -267,8 +267,8 @@
 		end
 		
 	private
-		def log_device_uuid
-			logger.fatal "Device UUID:"+get_uuid.to_s
+		def log_device_id
+			logger.fatal "Device Identifier:"+get_id.to_s
 		end
 end
 
